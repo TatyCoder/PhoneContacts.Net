@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace PhoneContacts.Net.Models;
 
     public class Contact

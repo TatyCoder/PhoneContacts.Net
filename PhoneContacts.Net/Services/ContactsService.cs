@@ -1,11 +1,43 @@
 ﻿using System;
-namespace PhoneContacts.Net.Services
+
+using Npgsql;
+using PhoneContacts.Net.Models;
+using PhoneContacts.Net.Controllers;
+
+namespace PhoneContacts.Net.Services;
+
+public class ContactsService
 {
-    public class ContactsService
+    string connectionString = "Host=localhost;Port=5432;Database=phone_contacts_net;Username=postgres;Password=admintc";
+
+    public ContactsService ()
     {
-        public ContactsService()
-        {
+    }
+
+    public List<Contact> getAllContacts ()
+    {
+        List<Contact> contacts = new List<Contact> ();
+
+        using (var conn = new NpgsqlConnection (connectionString)) {
+            conn.Open ();
+            // Retrieve data from the "contacts" table
+            using (var cmd = new NpgsqlCommand ("SELECT contact_id, name FROM contacts", conn)) {
+                var reader = cmd.ExecuteReader ();
+                {
+                    while (reader.Read ()) {
+                        // Retrieve data from the current row
+                        int contactId = reader.GetInt16 (0);
+                        string name = reader.GetString (1);
+
+                        // Create a Contact object and display the data
+                        Contact contact = new Contact (contactId, name);
+                        contacts.Add (contact);
+                        Console.WriteLine ("ContactId: {contact.contactId}, Name: {contact.name}");
+                    }
+                }
+            }
         }
+        return contacts;
     }
 }
 
