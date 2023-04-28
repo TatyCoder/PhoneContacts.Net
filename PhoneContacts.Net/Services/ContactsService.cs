@@ -71,5 +71,18 @@ public class ContactsService
             }
         }
     }
+
+    public Contact updateContact (Contact contact)
+    {
+        using (var conn = new NpgsqlConnection (connectionString)) {
+            conn.Open ();
+            using (var cmd = new NpgsqlCommand ("UPDATE contacts SET name = @name WHERE contact_id = @contact_id", conn)) {
+                cmd.Parameters.AddWithValue ("@contact_id", contact.contactId);
+                cmd.Parameters.AddWithValue ("@name", contact.name);
+                var reader = cmd.ExecuteNonQuery ();
+                return getContact (contact.contactId);
+            }
+        }
+    }
 }
 

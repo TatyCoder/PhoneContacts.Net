@@ -30,4 +30,11 @@ public class ContactsController : ControllerBase
         ContactsService cs = new ContactsService ();
         return cs.createContact (contact);
     }
+
+    [HttpPut]
+    public Contact updateContact (Contact contact)
+    {
+        ContactsService cs = new ContactsService ();
+        return cs.updateContact (contact);
+    }
 }
