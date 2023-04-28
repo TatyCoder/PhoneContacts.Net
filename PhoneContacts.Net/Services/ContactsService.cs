@@ -84,5 +84,19 @@ public class ContactsService
             }
         }
     }
+
+    public Contact deleteContact (int contactId)
+    {
+        using (var conn = new NpgsqlConnection (connectionString)) {
+            conn.Open ();
+
+            using (var cmd = new NpgsqlCommand ("DELETE FROM contacts WHERE contact_id = @contact_id", conn)) {
+                cmd.Parameters.AddWithValue ("@contact_id", contactId);
+                Contact deletedContact = this.getContact (contactId);
+                var reader = cmd.ExecuteNonQuery ();
+                return deletedContact;
+            }
+        }
+    }
 }
 

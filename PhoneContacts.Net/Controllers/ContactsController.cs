@@ -37,4 +37,11 @@ public class ContactsController : ControllerBase
         ContactsService cs = new ContactsService ();
         return cs.updateContact (contact);
     }
+
+    [HttpDelete ("{contactId}")]
+    public Contact deleteContact (int contactId)
+    {
+        ContactsService cs = new ContactsService ();
+        return cs.deleteContact (contactId);
+    }
 }
