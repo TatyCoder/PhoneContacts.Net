@@ -39,5 +39,24 @@ public class ContactsService
         }
         return contacts;
     }
+
+    public Contact getContact(int contactId)
+    {
+        using (var conn = new NpgsqlConnection(connectionString))
+        {
+            conn.Open();
+
+            using (var cmd = new NpgsqlCommand("SELECT contact_id, name FROM contacts WHERE contact_id = @contact_id", conn))
+            {
+                cmd.Parameters.AddWithValue("@contact_id", contactId);
+                var reader = cmd.ExecuteReader();
+                {
+                    reader.Read();
+                    Contact contact = new Contact(reader.GetInt16(0), reader.GetString(1));
+                    return contact;
+                }
+            }
+        }
+    }
 }
 
