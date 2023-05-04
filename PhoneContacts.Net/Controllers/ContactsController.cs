@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PhoneContacts.Net.Models;
-
 using PhoneContacts.Net.Services;
 
 namespace PhoneContacts.Net.Controllers;
@@ -18,10 +19,12 @@ public class ContactsController : ControllerBase
     }
 
     [HttpGet("{contactId}")]
-    public Contact getContact(int contactId)
+    public Contact getContact (int contactId)
     {
         ContactsService cs = new ContactsService();
-        return cs.getContact(contactId);
+        Contact contact = cs.getContact (contactId);
+        return contact;
+
     }
 
     [HttpPost]

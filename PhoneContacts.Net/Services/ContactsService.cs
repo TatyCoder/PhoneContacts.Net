@@ -6,8 +6,7 @@ using PhoneContacts.Net.Controllers;
 
 namespace PhoneContacts.Net.Services;
 
-public class ContactsService
-{
+public class ContactsService {
     string connectionString = "Host=localhost;Port=5432;Database=phone_contacts_net;Username=postgres;Password=admintc";
 
     public ContactsService ()
@@ -40,21 +39,34 @@ public class ContactsService
         return contacts;
     }
 
-    public Contact getContact(int contactId)
+    public Contact getContact (int contactId)
     {
-        using (var conn = new NpgsqlConnection(connectionString))
-        {
-            conn.Open();
+        using (var conn = new NpgsqlConnection (connectionString)) {
+            conn.Open ();
 
-            using (var cmd = new NpgsqlCommand("SELECT contact_id, name FROM contacts WHERE contact_id = @contact_id", conn))
-            {
-                cmd.Parameters.AddWithValue("@contact_id", contactId);
-                var reader = cmd.ExecuteReader();
-                {
-                    reader.Read();
-                    Contact contact = new Contact(reader.GetInt16(0), reader.GetString(1));
-                    return contact;
+            using (var cmd = new NpgsqlCommand ("SELECT contacts.contact_id, name, phone, phone_id FROM contacts, phones " +
+                "WHERE contacts.contact_id = phones.contact_id AND contacts.contact_id = @contact_id", conn)) {
+                cmd.Parameters.AddWithValue ("@contact_id", contactId);
+                var reader = cmd.ExecuteReader ();
+
+                List<Phone> phones = new List<Phone> ();
+
+                string name = "";
+
+
+                while (reader.Read ()) {
+                    int contact_id = reader.GetInt16 (0);
+                    name = reader.GetString (1);
+                    string phoneNumber = reader.GetString (2);
+                    int phone_id = reader.GetInt16 (3);
+
+                    Phone phone = new Phone (phone_id, phoneNumber, contact_id);
+                    phones.Add (phone);
                 }
+
+                Contact contact = new Contact (contactId, name, phones);
+                return contact;
+
             }
         }
     }
