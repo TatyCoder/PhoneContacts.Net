@@ -26,5 +26,19 @@ namespace PhoneContacts.Net.Services
                 }
             }
         }
+
+        public Phone updatePhone (Phone phone)
+        {
+            using (var conn = new NpgsqlConnection (connectionString)) {
+                conn.Open ();
+                using (var cmd = new NpgsqlCommand ("UPDATE phones SET phone = @phone WHERE phone_id = @phone_id", conn)) {
+                    cmd.Parameters.AddWithValue ("@phone_id", phone.phoneId);
+                    cmd.Parameters.AddWithValue ("@phone", phone.phone);
+                    cmd.Parameters.AddWithValue ("@contact_id", phone.contactId);
+                    var reader = cmd.ExecuteNonQuery ();
+                    return phone;
+                }
+            }
+        }
     }
 }

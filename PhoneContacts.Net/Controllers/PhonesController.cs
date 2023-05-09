@@ -20,4 +20,11 @@ public class PhonesController : ControllerBase
         PhonesService ps = new PhonesService ();
         return ps.createPhone (phone);
     }
+
+    [HttpPut]
+    public Phone updatePhone (Phone phone)
+    {
+        PhonesService ps = new PhonesService ();
+        return ps.updatePhone (phone);
+    }
 }
