@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Npgsql;
 using PhoneContacts.Net.Models;
 using PhoneContacts.Net.Controllers;
