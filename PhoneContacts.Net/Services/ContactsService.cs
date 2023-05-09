@@ -43,16 +43,20 @@ public class ContactsService {
         using (var conn = new NpgsqlConnection (connectionString)) {
             conn.Open ();
 
+            // Write a query to retrieve data from the table for a given ID
             using (var cmd = new NpgsqlCommand ("SELECT contacts.contact_id, name, phone, phone_id FROM contacts, phones " +
                 "WHERE contacts.contact_id = phones.contact_id AND contacts.contact_id = @contact_id", conn)) {
+                // populate the contact_id from the query with an actual ID passed to us (contactId parameter)
                 cmd.Parameters.AddWithValue ("@contact_id", contactId);
+                // execute the query with the parameter
                 var reader = cmd.ExecuteReader ();
 
+                // create a list to store the phone objects
                 List<Phone> phones = new List<Phone> ();
 
                 string name = "";
 
-
+                // iterate through all the records returned by the query and create a new Phone object for each
                 while (reader.Read ()) {
                     int contact_id = reader.GetInt16 (0);
                     name = reader.GetString (1);
@@ -63,6 +67,7 @@ public class ContactsService {
                     phones.Add (phone);
                 }
 
+                // create a new Contact object and set the list the Phones as well as the name and contactId
                 Contact contact = new Contact (contactId, name, phones);
                 return contact;
 

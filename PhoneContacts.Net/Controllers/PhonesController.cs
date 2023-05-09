@@ -14,6 +14,13 @@ public class PhonesController : ControllerBase
     {
     }
 
+    [HttpGet ("{phoneId}")]
+    public Phone getPhone (int phoneId)
+    {
+        PhonesService ps = new PhonesService ();
+        return ps.getPhone (phoneId);
+    }
+
     [HttpPost]
     public Phone createPhone (Phone phone)
     {
@@ -26,5 +33,12 @@ public class PhonesController : ControllerBase
     {
         PhonesService ps = new PhonesService ();
         return ps.updatePhone (phone);
+    }
+
+    [HttpDelete ("{phoneId}")]
+    public Phone deletePhone (int phoneId)
+    {
+        PhonesService ps = new PhonesService ();
+        return ps.deletePhone (phoneId);
     }
 }
